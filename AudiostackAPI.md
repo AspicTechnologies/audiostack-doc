@@ -3,18 +3,16 @@ title: C++ API Documentation
 permalink: /audiostack/AudiostackAPI/
 ---
 
-{% icon fa-exclamation-triangle  %} {% icon fa-exclamation-triangle  %} {% icon fa-exclamation-triangle  %} WARNING : Audiostack documentation is not up to date anymore. We are working on it to provide you a nice and simple new doc as soon as possible.
-
 Getting started
 -----
 During the installation process, several directories were created at the installation location.
 
-- **bin**: contains runtime libraries, asio inspector and audiostack server
-- **cmake**: contains CMake scripts to help CMake find the library
-- **depends**: contains third party installers like OpenAL
-- **doc**: the directory where this documentation is stored
 - **include** : contains the C and C++ header files
-- **lib32 and lib64** : contains the dynamic libraries to ship with your application
+- **lib** : dynamic libraries to build and ship your application (linux/windows)
+- **helpers**: small tools, such as asio inspector or jack inspector
+- **server**: audiostack server and libraries, usefull to enable client/server mode (see Doc)
+- **cmake**: contains CMake scripts to help CMake find the library
+- **depends**: contains third party installers
 - **samples** : contains some ready to test code sample and cmake projects 
 
 The C API is provided for cross-compiler compatibility and is not designed to be used directly.
@@ -24,7 +22,6 @@ The C++ API is then strongly recommended. The current API documentation will onl
 
 * C++ compiler with C++11 support and correctly chosen architecture
 * CMake to build given *samples*
-* The installation process should have created an environment variable *AUDIOSTACK_CMAKE* containing the path to the *cmake/* directory located in the installation directory. Please ensure that this variable is correctly filled.
 
 ### Building *samples*
 To build all the samples, please execute the following commands. If not available on your system, there must exist close alternatives.
@@ -37,7 +34,7 @@ cmake ..
 make
 ```
 
-### Helloworld using *Aspic Audiostack* and *CMake*
+### Helloworld using Audiostack and CMake
 Create a new project directory
 
 * CMakeLists.txt  
@@ -63,13 +60,13 @@ endif (AspicAudiostack_FOUND)
 #include "Audiostack.hpp"
 
 int main(){
-	AudiostackContext context;
-	context.setLicenseKeyFromFile("LICENSE_FILE.aslc");
+	AudiostackContext context;							
+	context.setLicenseKeyFromFile("LICENSE_FILE.aslc");	
 	
 	int input=0
 	int output=1;
-	context.createInput(input,HelloInput);
-	context.createOutput(output,OpenALOutput);
+	context.createInput(input,HelloInput);				
+	context.createOutput(output,OpenALOutput,false);	
 	
 	context.connect(input,output);
 	
@@ -96,30 +93,39 @@ AudiostackContext
 ```c++
 AudiostackContext()
 ```
-> Construct an *AudiostackContext*.
+Construct an *AudiostackContext*.
+
+<br/>
 
 ```c++
 ~AudiostackContext()
 ```
-> Destroy the *AudiostackContext*. While destroying, the diagram is totally cleared
+Destroy the *AudiostackContext*. While destroying, the diagram is totally cleared
+
+<br/>
 
 ```c++
 void clear()
 ```
-> Clear the diagram. All inputs, outputs, buses, effects and parameters are destroyed.
+Clear the diagram. All inputs, outputs, buses, effects and parameters are destroyed.
+
+<br/>
 
 ```c++
 void setLicenseKeyFromFile(const char* _keyFile);
 ```
 
-> Set a license file. A valid license file must be loaded to ensure diagram construction will work properly. License files holds information about the modules you have access to (Binaural, Asio, Vbap).
+Set a license file. A valid license file must be loaded to ensure diagram construction will work properly. License files holds information about the modules you have access to (Binaural, Asio, Vbap).
+
+<br/>
 
 ```c++
 void setLicenseKeyFromMemory(const char* _address, int _length);
 ```
 
-> Load license data from memory. License content must be stored in a char[].
+Load license data from memory. License content must be stored in a char array.
 
+<br/>
 
 ### Diagram edition
 
@@ -127,212 +133,233 @@ void setLicenseKeyFromMemory(const char* _address, int _length);
 int createInput(int _objectId, int _inputType, Args...)
 ```	
 					
-> Create an audio input of *_inputType* with *objectId* as identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
+Create an audio input of type *_inputType* with *_objectId* as **unique** identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
 
-> Please also note that *_objectId* must be unique among all inputs, outputs, buses and effects.
+Please note that *_objectId* must be unique among all inputs, outputs, buses and effects.
 
-> See [API Extensions sections](#api-extensions) to learn more about available inputs and their parameters.
+See API Extensions to learn more about available inputs and their parameters.
 
+<br/>
 
 ```c++
 int createOutput(int _objectId, int _outputType, Args...)
 ```
-> Create an audio output of *_ouputType* with *_objectId* as identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
+Create an audio output of *_ouputType* with *_objectId* as unique identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
 
-> *_objectId* must be unique among all inputs, outputs, buses and effects.
+*_objectId* must be unique among all inputs, outputs, buses and effects.
 
-> See API Extensions sections to learn more about available outputs and their parameters.
-		
+See API Extensions sections to learn more about available outputs and their parameters.
+
+<br/>		
 
 ```c++		
 int createBus(int _objectId)
 ```
-> Create an audio bus with *_objectId* as identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
 
-> *_objectId* must be unique among all inputs, outputs, buses and effects.
+Create an audio bus with *_objectId* as identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
+
+*_objectId* must be unique among all inputs, outputs, buses and effects.
+
+<br/>
 
 ```c++		
 void setLastEffectCount(int _busId, int _lastEffectCount)
 ```
-> Set the number of instance of the last effect in the bus *_busId* to *_lastEffectCount*. Effects in the bus will be duplicated to enable differentiated processing, like independent spatialization and attenuation for multiple listeners. The bus will have multiple inputs and outputs (see [naming section](#naming)).
 
-> See our samples to go further.
+{% icon fa-exclamation-triangle  %} This entry point requires revision
+
+Set the number of instance of the last effect in the bus *_busId* to *_lastEffectCount*. Effects in the bus will be duplicated to enable differentiated processing, like independent spatialization and attenuation for multiple listeners. The bus will have multiple inputs and outputs (see [naming section](#naming)).
+
+See our samples to go further.
+
+<br/>
 
 ```c++
 int createEffect(int _objectId, int _busId, int _effectType, Args...)
 ```
-> Create an audio effect of type *_effectType* at the back of bus *_busId* with *_objectId* as identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
 
-> *_objectId* must be unique among all inputs, outputs, buses and effects.
+Create an audio effect of type *_effectType* at the back of bus *_busId* with *_objectId* as identifier. Returns the identifier of the object if the operation is successful, -1 otherwise.
 
-> See API Extensions sections to learn more about available effects and their parameters.
+*_objectId* must be unique among all inputs, outputs, buses and effects.
 
+See API Extensions sections to learn more about available effects and their parameters.
 
+<br/>
 
 ```c++
 void removeInput(int _objectId)
 ``` 																
 
-> Remove audio input holding identifier *_objectId*.
+Remove audio input holding identifier *_objectId*.
 
+<br/>
 
 ```c++
 void removeOutput(int _objectId)
 ``` 																
-> Remove audio output holding identifier *_objectId*.
 
+Remove audio output holding identifier *_objectId*.
+
+<br/>
 
 ```c++
 void removeBus(int _objectId)
 ``` 																    
-> Remove audio bus holding identifier *_objectId* and all of its effects.
 
+Remove audio bus holding identifier *_objectId* and all of its effects.
+
+<br/>
 
 ```c++
 void removeEffect(int _objectId)
 ``` 																
-> Remove audio effect holding identifier *_objectId*.
 
+Remove audio effect holding identifier *_objectId*.
 
-
-```c++
-void connect(int _outObjectId, const char* _outputName, int _inObjectId, const char* _inputName)
-```
-> Connects the output *_outputName* of object *_outObjectId* to the input *_inputName* of object *_inObjectId*. Use this method to connect all your  inputs, buses and outputs. 
-
-#### Naming
-
-Audio inputs own a sole output called "out".
-
-Audio outputs own a sole input called "in".
-
-Buses may own many inputs/outputs. For instance, a spatialization bus effect for 2 listeners holds 2 outputs and inputs. Therefore, these inputs/outputs are named : `in_0`, `in_1`, `out_0`, `out_1`, etc.
-
+<br/>
 
 ```c++
 void connect(int _outObjectId, int _inObjectId)
-```													 
-> This method is easier to use for objects owning only one input/output. In case of ambiguity, for instance when *_inObjectId* or *_outObjectId* owns many inputs or outputs, this method will raise an error (see Error handling section).
+```
 
+Connects object *_outObjectId* to object *_inObjectId*. This is the easiest way to connect inputs/buses/outputs.
+
+However, some buses may have multiple inputs and outputs. In this ambiguous case, the method will raise an error (see Error handling section).
+
+Therefore you'll have to use
+```c++
+void connect(int _outObjectId, const char* _outputName, int _inObjectId, const char* _inputName)
+```													 
+
+It connects the output *_outputName* of object *_outObjectId* to the input *_inputName* of object *_inObjectId*. 
+
+* Audio inputs own a sole output called "out".
+
+* Audio outputs own a sole input called "in".
+
+* Buses may own many inputs/outputs. For instance, a spatialization bus effect for 2 listeners holds 2 outputs and inputs. Therefore, these inputs/outputs are named : `in_0`, `in_1`, `out_0`, `out_1`, etc.
+
+<br/>
+
+```c++
+void disconnect(int _outObjectId, int _inObjectId)
+```
+
+Disconnect given objects.
 
 ```c++
 void disconnect(int _outObjectId, const char* _outputName, int _inObjectId, const char* _inputName)
 ```
-> Disconnect given objects.
 
+Disconnect specific IO of given objects.
 
+<br/>
 
+##### Transactions
 
+Above are listed main operations to modify diagrams, ie IO/effects creation, deletion, connection.
 
+You can use them before calling play() and you also can use them after play(). In this second case, you just have to enclose calls in a transaction:
 
+```c++
+void beginTransaction()
+```
 
+Starts a new transaction on the context. It allows you to modify the digram.
+
+```c++
+void endTransaction()
+```
+
+End transaction, and applies any modification you have asked for. If your modifications create an invalid state, the transaction will fail and raise an error.
+
+```c++
+void waitForTransaction()
+```
+	
+Transactions are not applied synchroniously. If you wish, you can wait until it is done.
+
+Sample:
+
+```c++
+[...]
+
+context.beginTransaction();
+
+context.createInput(IN_ID, TYPE, ARGS);				// create a new input (a source)
+context.connect(IN_ID, ALREADY_EXISTING_BUS_ID);	// connect it to already existing parts of the digram
+
+context.endTransaction();							// applies modifications
+context.waitForTransaction();
+
+[...]
+```
 
 ### Parameters
 
-Parameters are declared and owned by inputs, outputs or effects. The following function may prove useful to modify these parameters. Please refer to [dedicated doc](../index#parameters) to get a better grasp on parameters, and to [API Extensions sections](#api-extensions) to learn more about available parameters.
+Parameters are declared and owned by inputs, outputs or effects. The following function may prove useful to modify these parameters. Please refer to [Advanced Concepts](../AdvancedConcepts) to get a better grasp on parameters, and to API Extensions to learn more about available parameters.
+
+At some point, please read [Advanced Concepts](../AdvancedConcepts) to learn about the difference between runtime parameters and instanciation parameters.
+
+<br/>
 
 ```c++
 void setParameter(const char* _param, T _value)
 ```
-> Apply the value *_value* to the parameter at address *_param*
 
-> Please note that parameters mapping on multivalued parameters is only resolved **at runtime**. It means that you can use setParameter to modify parameters at all time, but that multivalued effects mapping (like `listener/ID/position` or `source/ID/gain`) will only be available after play() has been called.
+Apply the value *_value* to the parameter at address *_param*
 
-> Therefore, before play(), you can either :
-> - modify parameters using non mapped addresses (`effect/EFFECT_ID/listener_position/CHANNEL_ID` or `effect/EFFECT_ID/src_gain/CHANNEL_ID`), which is probably the least interesting way,
-> - use setParameterAtInit() methods. They accept mapped addresses and apply values when play() is called.
-> After play(), use setParameter().
+Please use proper type for parameters (float, int, unsigned int, etc). Type mismatch will raise an error.
 
-> This approach relates to multivalued parameters (ex: position, gain, mute, rotation) whose parameter mapping requires runtime resolution. For all other parameters (ex : buffer size, sample rate), mapping (ex: application/buffer_size) is resolved automatically allowing offline modification.
-
-#### Samples
-
-> SetParameter sample (non runtime parameter):
-```cpp
-// Valid
-context.setParameter("application/buffer_size", 4096U);
-
-context.play();
-
-// NOT Valid
-context.setParameter("application/buffer_size", 4096U);
-```
-
-> SetParameter sample (runtime parameter):
-```cpp
-// NOT Valid
-context.setParameter("source/SOURCE_ID/position", sourcePos);
-
-context.play();
-
-// Valid
-context.setParameter("source/SOURCE_ID/position", sourcePos);
-```
-
-> SetParameter and SetParameterAtInit :
-```cpp
-// Valid
-context.setParameterAtInitVec3("source/SOURCE_ID/position", sourcePos);
-
-context.play();
-
-// Also Valid
-context.setParameter("source/SOURCE_ID/position", sourcePos);
-```
-
-------
+##### Samples
 
 ```c++
-void setParameterAtInit(const char* _param, T _value)
-```
-> Apply the value *_value* to the parameter at address *_param* when play() is called on AudiostackContext. 
 
-```c++
-void setParameterAtInitVec3(const char* _param, const float* _value)
-```
-> Apply the value *_value* to the parameter at address *_param* when play() is called on AudiostackContext. Value must be a table of 3 float.
+context.setParameter("application/buffer_size", 512U);
 
+float sourcePos[] =   {0.0, 0.0, 0.0};
+context.setParameter("source/SOURCE_ID/position", sourcePos);
+
+```
+
+<br/>
 
 ```c++
 void sendCommand(const char* _param, Args...)
 ```
-> Send command *Args* to address *_param*. 
+
+Send command *Args* to address *_param*. 
+
+You can learn how and when to use commands using Extensions. For instance audio file use commands to trigger play/pause/stop.
+
+<br/>
 
 ```c++
 void setCallback(const char* _param, void(*_f)(Args...))
 ```
-> Set callback *_f* to address *_param*. 
 
+Set callback *_f* to address *_param*. 
 
+You can learn how and when to use callbacks using Extensions. For instance, audio metering uses callbacks to provide you realtime metering.
 
-```c++
-void beginParameterBundle()
-```
-> Begin a new parameter bundle. If a bundle is opened, all parameter modifications are stored and applied at bundle's closure.
-			
-```c++
-void endParameterBundle()
-```
-> End the current parameter bundle, applies all parameters modifications called since the last call to beginParameterBundle().
-					 
+<br/>
+
 ```c++
 void setParameterPattern(int _objectId, const char* _param, const char* _pattern)
 ```
 
-> Apply the pattern *_pattern* to the parameter *_param* of object *_objectId*. If successful, the parameter will be mapped to the pattern.
+Apply the pattern *_pattern* to the parameter *_param* of object *_objectId*. If successful, the parameter will be mapped to the pattern.
+
+<br/>
  			 
 ```c++
 void setVariable(int _objectId, const char* _variable, T _value)
 ```
 
-> Set a variable named *_variable* of value *_value* on the object designated by id *_objectId*.
+Set a variable named *_variable* of value *_value* on the object designated by id *_objectId*.
+
+<br/>
 		
-
-
-
-
-
-
 		
 
 ### Play/Stop
@@ -340,30 +367,18 @@ void setVariable(int _objectId, const char* _variable, T _value)
 ```c++
 void play()
 ```
-> Start audio processing. No diagram modification may be applied after play() (except for runtime parameters).
+
+Start audio processing. After this call, every operation on the diagram (IO creation or deletion, connections, modification of instanciation parameters) must be enclosed in a transaction (see below). However, runtime parameters can be set at any time without transaction.
+
+<br/>
 
 ```c++
 void stop()
 ```
-> Stop audio processing.
 
+Stop audio processing.
 
-### Extensions
-
-Aspic Audiostack API is divided into modules. Each module offer specific features (such as Binaural rendering or Network streaming).
-
-Since these methods are wrapped, please refer to API Extensions section for more information.
-
-```c++
-void loadModule(const char* _module)
-```
-> Load module of name *_module* in current context. If successful, the context will now enable the developer to access methods and inputs/outputs/effects of this module.
-
-```c++
-void* getSymbol(const char* _module, const char* _symbol)
-```
-> Modules may contain specific functions. This method returns a pointer to the symbol named *_symbol*. Please see Extensions sections to learn more about available symbols.
-
+<br/>
 
 ### Error handling
 
@@ -372,24 +387,32 @@ AudiostackContext will not throw any exception. Instead, each method call may se
 ```c++
 static int getError()
 ```
-> Return error status of the API. A value equal to 0 means there is no error. A value equal to 1 means an error has been raised.
 
-> Please note that calling this method will **reset the internal error flag** to 0.
+Return error status of the API. A value equal to 0 means there is no error. A value equal to 1 means an error has been raised.
+
+Please note that calling this method will **reset the internal error flag** to 0.
+
+<br/>
 
 ```c++
 static const char* getLastErrorMessage()
 ```
-> Contains the description of the last error raised. You typically want to get this message right after a getError call returned 1.
 
-> Since this method doesn't change any internal state, an empty error message doesn't mean there are no error.
+Contains the description of the last error raised. You typically want to get this message right after a getError call returned
 
+Since this method doesn't change any internal state, an empty error message doesn't mean there are no error.
 
-API Extensions
------
-To use complementary features proposed along with *Aspic Audiostack*. There exists some extension API. These functionalities are complementary outputs, inputs and effects types but also helper functions and objects to handle ASIO, OSC, Audio file, etc. more easily.
+<br/>
 
-### Loading extensions
-Extensions are loaded through the *AudiostackContext* using *loadModule* and *getSymbol*. Alternatively, most of the extension are proposed with a C++ wrapper that is able to load all symbols through the *AudiostackContext*.
+### Extensions
+
+Audiostack API is divided into modules (also called Extensions). Each module offer specific features (such as Binaural rendering or Network streaming).
+
+```c++
+static void MyExtension::Load(Context* _context)
+```
+
+Load module/extension *MyExtension* in *_context*. If successful, the context will now enable the developer to access methods and inputs/outputs/effects of this module.
 
 Given an extension called *MyExtension*, a sample program loading that extension may look like this :
 
@@ -403,29 +426,29 @@ int main(){
 
 	MyExtentionInterface::Load(context.impl);
 	
-	MyExtention extension;
-	extension.myFunction()
+	MyExtensionObject object;
+	object.someFunction()
 	...
 ```
 
-In the previous example, constructing a *MyExtention* before the call *MyExtensionInterface::Load* would have caused a segmentation fault.
+In the previous example, constructing a *MyExtensionObject* before the call *MyExtensionInterface::Load* would have caused a license error.
 
-### Available extensions
- 
-Here is a list of available extensions for *Aspic Audiostack*. Those that you can use depends on the license you have agreed to.
+<br/>
 
-| Extension 								| Features 	|
-| -----										| -----		|
-| [Core](../ExtCore)					| OpenAL stereo output and microphone input, mixing, simple 3D sound (attenuation over distance and simple panning), gain			|
-| [AudioFile](../ExtAudioFile)			| Read audio files, access file information (samplerate, length, etc.) and keep them in a easy to use library.									|
-| *Extended-core*							| Additional effects (Low pass filter, high pass filter, equalizer, delay, simple reverberation)									|
-| [Binaural](../ExtBinaural)			| Binaural spatialization based on HRTF for precise perception of sound incoming direction.											|
-| [Nahimic4Audiostack](../ExtNahimic)	| Binaural spatialization based on HRTF for precise perception of sound incoming direction. Developed by *A-Volute*					|
-| *Aspic Engine*							| Realistic geometry-based rendering (with echo, occlusion and convolution reverb) 													|			
-| [Asio](../ExtAsio)					| Professionnal sound card handling for multi-headset or multi-speaker addressing. Enable lowest latencies.							|
-| [VBAP](../ExtVBAP)					| Enable spatialization over multiple speakers on a 2d or 3d layout.																|
-| [OpenSoundControl](../ExtOSC)		| Binding for OSC; enable to control parameters, command and callbacks. Custom method can be added											|
-| *Rtp*										| Audio streaming between clients and server can be done. A handshake service is provided for NAT punchthrough and peer discovery.	|
-| *PluginAPI*								| User can register custom effects, inputs and outputs																				|
+## Disclaimer
 
-*Work In Progress*
+Audiostack handles very complex concepts (patterns, variables, etc). Creating nice audio pipelines may prove very easy, but tuning specific features may prove harder.
+
+In order to produce a clear documentation, in code samples and in extensions documentation, **we will use default patterns and variables**. 
+
+This means that:
+* each Input automatically declares a variable src_id equal to its objectId
+* each Output automatically declares a variable list_id equal to its objectId
+* each Input/Output/Effect create a convenient pattern to address its parameters
+
+At some point, we will create a 'Power User' section to help you use custom patterns.
+
+## What do I do now?
+
+Have you checked code samples? Please do, they will help you create your first audio pipeline :)
+

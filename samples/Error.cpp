@@ -13,8 +13,8 @@ try{
 	context.setLicenseKeyFromFile("LICENSE_FILE.aslc");
 	err(context);	// Get license errors
 	
-	context.createInput(micId,OpenALInput);
-	context.createOutput(outputId,OpenALOutput,false);
+	context.createInput(micId,WindowsCoreAudioInput);
+	context.createOutput(outputId,WindowsCoreAudioOutput,false);
 	err(context);	// Get last error, raised by createInput or createOutput
 	
 	context.connect(micId,outputId);			

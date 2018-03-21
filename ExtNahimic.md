@@ -1,11 +1,9 @@
 ---
-title: Nahimic Binaural module
+title: Nahimic (third party binaural)
 permalink: /audiostack/Nahimic/
 ---
 
-{% icon fa-exclamation-triangle  %} {% icon fa-exclamation-triangle  %} {% icon fa-exclamation-triangle  %} WARNING : Audiostack documentation is not up to date anymore. We are working on it to provide you a nice and simple new doc as soon as possible.
-
-Aspic Audiostack Nahimic&trade; Binaural module provides binaural spatialization algorithms developed by A-Volute&trade;.
+Audiostack Nahimic&trade; Binaural module provides binaural spatialization algorithms developed by A-Volute&trade;.
 
 ## Effects
 
@@ -31,6 +29,8 @@ context.createEffect(EFFECT_ID, BUS_ID, NahimicBinauralSpatialization);
 
 #### Parameters
 
+##### Instanciation
+
 - **sample_rate (*unsigned int*)** : sample rate of processed audio buffers.
 
 	This parameter is mapped by default to `application/sample_rate`.
@@ -38,8 +38,6 @@ context.createEffect(EFFECT_ID, BUS_ID, NahimicBinauralSpatialization);
 	Usage : 
 ```cpp
 context.setParameter("application/sample_rate",48000);
-// OR
-context.setParameter("effect/ID/sample_rate",48000);
 ```
 
 - **buffer_size (*unsigned int*)** : the length of processed audio buffers.
@@ -48,36 +46,48 @@ context.setParameter("effect/ID/sample_rate",48000);
 
 	Usage : 
 ```cpp
-context.setParameter("application/buffer_size",4096U);
-// OR 
-context.setParameter("effect/ID/buffer_size",4096U);
+context.setParameter("application/buffer_size",1024U);
 ```
 
-- **src_position (*vec3, multivalued*) :** position of each channel audio source
+##### Runtime
+
+- **src_position (*vec3, multivalued*) :** position of audio source
 
 	This parameter will contain N values, with N equal to the number of channels reaching effect's input.
 
 	Parameter is mapped by default to `source/%src_id/position`
+
+	Usage with default vars and patterns:
+	``` cpp
+float sourcePos[] = {1.0, 2.0, 3.0};
+context.setParameter("source/9/position", sourcePos);
+	```
 	
-- **listener_position (*vec3*) :** position of audio listener
+- **listener_position (*vec3, multivalued*) :** position of audio listener
+
+	This parameter will contain N values, with N equal to the number of listeners.
 
 	Parameter is mapped by default to `listener/%list_id/position`
 	
-- **listener_rotation (*vec3*) :** rotation of audio listener
+	Usage with default vars and patterns:
+	``` cpp
+float playerPos[] = {1.0, 2.0, 3.0};
+context.setParameter("listener/1/position", playerPos);
+	```
+	
+- **listener_rotation (*vec3, multivalued*) :** rotation of audio listener
 
 	This parameter will contain N values, with N equal to the number of listeners.
 
 	Parameter is mapped by default to `listener/%list_id/rotation`
 	
-	
-	Usage : 
-	
+	Usage with default vars and patterns: 
 ``` cpp
-float myPos[] = {1.0, 2.0, 3.0};
-context.setParameter("source/ID/position", myPos);
+float playerRot[] = {1.0, 2.0, 3.0};
+context.setParameter("listener/1/rotation", playerRot);
 ```
 	
-> **Note :** coordinates in Aspic Audiostack are specified using right-hand axes (X right, Y up, Z backward).
+{% icon fa-exclamation-triangle  %} **Note :** coordinates in Aspic Audiostack are specified using right-hand axes (X right, Y up, Z backward).
 
 	
 
@@ -92,7 +102,7 @@ context.setParameter("source/ID/position", myPos);
 
 #### Nahimic spatialization sample
 
-This sample spatialize microphone for one listener.
+This sample spatialize audio for one listener.
 
 For multilistener samples, please see Asio Extension samples.
 

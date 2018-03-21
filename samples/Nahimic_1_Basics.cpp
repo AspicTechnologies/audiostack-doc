@@ -1,12 +1,10 @@
 [...]
 
-int helloId = 0;
-int outputId = 1;
-int busId = 2;
-int spatId = 3;
+enum:int{helloId = 0,outputId = 1, busId = 2, spatId = 3};
 
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE_FILE.aslc");
+NahimicExtension::Load(context->impl);	// Load extension, allows to use inputs/outputs/effects contained in the extension
 
 context.createInput(helloId, HelloInput);
 context.createOutput(outputId, OpenALOutput,true);                 
@@ -22,8 +20,8 @@ float sourcePos[]   =   {0.0, 0.0, -1.0};
 float listenerPos[] =   {0.0, 0.0, 1.0};
 float listenerRot[] =   {0.0, 0.0, 0.0};
 
-context.setParameterAtInitVec3("listener/1/position",listenerPos);
-context.setParameterAtInitVec3("source/0/position",sourcePos);
+context.setParameter("listener/1/position",listenerPos);
+context.setParameter("source/0/position",sourcePos);
 
 context.play();
 

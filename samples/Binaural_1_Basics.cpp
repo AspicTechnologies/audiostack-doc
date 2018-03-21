@@ -1,12 +1,10 @@
 [...]
 
-int helloId = 0;
-int outputId = 1;
-int busId = 2;
-int spatId = 3;
+enum:int{helloId = 0, outputId = 1, busId, spatId};
 
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE.aslc");
+BinauralExtension::Load(context->impl);	// Load binaural extension, allows to use effects contained in the extension
 
 context.createInput(helloId, HelloInput);
 context.createOutput(outputId, OpenALOutput,true);                 
@@ -34,7 +32,7 @@ do{
 
 	switch(c){
 	case 'l':
-		listenerRot[1]-=10;
+		listenerRot[1]-=10;	// Rotate around Y axis (=> azimuth)
 		context.setParameter("listener/1/rotation",listenerRot);
 		err(context);
 		break;

@@ -7,11 +7,11 @@ void atEndCallback(){
 
 [...]
 
-int fileId = 0;
-int outputId = 1;
+enum:int{fileId=0,outputId=1};
 
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE_FILE.aslc");
+CoreAudioFileExtension::Load(context->impl);	// Load extension, allows to use inputs/outputs and helpers contained in the extension
 
 context.createInput(fileId,AudioFileReader,"FILE.wav");
 context.createOutput(outputId,OpenALOutput,false);

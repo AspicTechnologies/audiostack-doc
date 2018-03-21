@@ -3,19 +3,23 @@ title: Code samples
 permalink: /audiostack/Samples/
 ---
 
-{% icon fa-exclamation-triangle  %} {% icon fa-exclamation-triangle  %} {% icon fa-exclamation-triangle  %} WARNING : Audiostack documentation is not up to date anymore. We are working on it to provide you a nice and simple new doc as soon as possible.
+Here is our simplest Hello world sample
+
+```cpp
+{% include_relative samples/Core_0_Hello_v2.cpp %}
+```
 
 ### Extension specific samples
 
-You can find code samples for each extension :
+Each API Extension section contains samples, however, you can also use this list to direclty jump to specific samples:
 
-- [Core samples](../Core)
-- [Audio file samples](../AudioFile)
-- [Binaural samples](../Binaural)
-- [Nahimic samples](../Nahimic)
-- [ASIO samples](../Asio)
-- [VBAP samples](../VBAP)
-- *[OSC samples](../OSC)*
+- [Core samples](../ExtCoreSamples)
+- [Audio file samples](../ExtAudioFileSamples)
+- [Binaural samples](../ExtBinauralSamples)
+- [Nahimic samples](../ExtNahimicSamples)
+- [ASIO samples](../ExtAsioSamples)
+- [VBAP samples](../ExtVBAPSamples)
+- *[OSC samples](../ExtOSCSamples)*
 
 ### Error handling
 

@@ -1,22 +1,33 @@
-- title: Documentation
+- title: Getting started
   docs:
-  - index
-  - AudiostackAPI
+  - Index
+  - AdvancedConcepts
   - Server
-- title: Samples
+- title: SDK - C++ API
   docs:
+  - AudiostackAPI
   - Samples
+- title: SDK - Extensions
+  docs:
+  - Extensions
   - Core
   - AudioFile
   - Binaural
-  - Nahimic
-  - Asio
-  - VBAP
+  - Ambisonics
   - OSC
-- title: Unity
+  - VBAP
+  - Asio
+  - Memory
+  - extensions/RTP
+  - Jack
+  - Plugin
+  - Nahimic
+  - Sphere
+- title: Unity3D - Basics
   docs:
-  - UnityPlugin
-  - UnityBasicSample
-  - UnityCollaborativeSample
+  - Unity
+- title: Unity3D - Samples
+  docs:
+  - unity3d/samples/AsioToUnity
+  - unity3d/samples/MultiListenerUnityAsio
 
-  

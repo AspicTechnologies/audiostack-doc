@@ -3,8 +3,7 @@
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE_FILE.aslc");
 
-int helloId = 0;
-int outputId = 1;
+enum:int{helloId,outputId};
 
 context.createInput(helloId,HelloInput);
 context.createOutput(outputId,WindowsCoreAudioOutput,false);
@@ -23,5 +22,4 @@ do{
 
 context.stop();
 
-	
 [...]

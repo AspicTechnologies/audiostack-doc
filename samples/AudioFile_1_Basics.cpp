@@ -1,18 +1,22 @@
 [...]
 
+
+enum:int{fileId = 0,outputId};
+
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE.aslc");
+CoreAudioFileExtension::Load(context->impl);	// Load extension, allows to use inputs/outputs and helpers contained in the extension
 
-context.createInput(0,AudioFileReader,"FILE.wav");
+context.createInput(fileId,AudioFileReader,"FILE.wav");
 // file is a mono, 48kHz/16bits wav file located on disk
 // OR context.createInput(0,AudioFileReader,"KEY") if in server
-context.createOutput(1,OpenALOutput,false);
+context.createOutput(outputId,OpenALOutput,false);
 // Output is mono, in order to accept mono file.
 
 context.setParameter("source/0/loop",true);             // file will play in loop
 context.setParameter("source/0/start_on_awake",true);   // start file reading automatically
 
-context.connect(0,1);
+context.connect(fileId,outputId);
 
 context.play();
 

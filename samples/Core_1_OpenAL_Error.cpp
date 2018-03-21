@@ -6,8 +6,7 @@ void err(const AudiostackContext& _context){
 [...]
 
 try{
-	int micId = 0;
-	int outputId = 1;
+	enum:int{micId, outputId };
 
 	AudiostackContext context;
 	context.setLicenseKeyFromFile("LICENSE_FILE.aslc");
