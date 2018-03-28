@@ -9,7 +9,7 @@
   - Samples
 - title: SDK - Extensions
   docs:
-  - Extensions
+  - ExtensionsPage
   - Core
   - AudioFile
   - Binaural
@@ -20,9 +20,12 @@
   - Memory
   - extensions/RTP
   - Jack
-  - Plugin
+  - extensions/PluginAPI
   - Nahimic
   - Sphere
+- title: SDK - Samples
+  docs:
+  - extensions/PluginAPISamples
 - title: Unity3D - Basics
   docs:
   - Unity

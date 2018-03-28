@@ -1,6 +1,6 @@
 ---
 title: List of available extensions
-permalink: /audiostack/Extensions/
+permalink: /audiostack/ExtensionsPage/
 ---
 
 ### Available extensions
