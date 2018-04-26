@@ -4,10 +4,9 @@ enum:int{helloId = 0, outputId = 1, busId, spatId};
 
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE.aslc");
-BinauralExtension::Load(context->impl);	// Load binaural extension, allows to use effects contained in the extension
 
 context.createInput(helloId, HelloInput);
-context.createOutput(outputId, OpenALOutput,true);                 
+context.createOutput(outputId, WindowsCoreAudioOutput,true);                 
 // Output is stereo, because binaural effect produces a stereo output.
 
 context.createBus(busId);                                       

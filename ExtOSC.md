@@ -1,5 +1,5 @@
 ---
-title: OSC module
+title: OSC 
 permalink: /audiostack/OSC/
 ---
 

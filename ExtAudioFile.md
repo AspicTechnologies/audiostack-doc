@@ -142,7 +142,7 @@ context.sendCommand("source/3/seek",4800);
 
 	Usage : 
 ```cpp
-context.setCallback("src/ID/at_end",&atEndCallback); // atEndCallback is an argument-less function returning void.
+context.setCallback("source/ID/at_end",&atEndCallback); // atEndCallback is an argument-less function returning void.
 ``` 
 
 

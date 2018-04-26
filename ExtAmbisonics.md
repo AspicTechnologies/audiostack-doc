@@ -1,6 +1,6 @@
 ---
 title: Ambisonics
-permalink: /audiostack/Ambisonics/
+permalink: /audiostack/extensions/Ambisonics/
 ---
 
 This extension handles ambisoncis streams: encoding, decoding, conversions.
@@ -9,7 +9,7 @@ This extension handles ambisoncis streams: encoding, decoding, conversions.
 	* [AmbisonicsToBinaural](#ambisonics-to-binaural)
 	* [AmbisonicsEncoder](#ambisonics-encoder)
 	* [AmbisonicsOrderManipulation](#ambisonics-order-manipulation)
-
+2. [Code samples](#code-samples)
 
 
 
@@ -27,7 +27,7 @@ Renders ambisonics streams as binaural.
 | I/O		| Channel count 		| Sub channel count	| |
 :-:|:-:|:-:|-
 |`in`		| N						| M			| |
-|`out`		| N						| M 		| |
+|`out`		| N						| 2 (BINAURAL) 		| |
 
 
 #### Construction
@@ -147,3 +147,24 @@ Usage:
 ```cpp
 context.createEffect(EFFECT_ID, BUS_ID, AmbisonicsOrderManipulation, "ACN_SN3D_ORDER3", "TBE");
 ```
+
+-----
+
+<br/>
+<br/>
+
+## Code samples
+
+For more code samples, see [Ambisonics samples](../ambisonics-samples)
+
+### Ambisonics to Binaural
+
+This sample renders an ambisonics stream in binaural.
+
+```cpp
+{% include_relative extensions/ExtAmbisonics_1_HOAToBinaural.cpp %}
+```
+
+
+For more code samples, see [Ambisonics samples](../ambisonics-samples)
+

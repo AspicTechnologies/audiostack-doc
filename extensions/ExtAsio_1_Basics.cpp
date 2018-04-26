@@ -16,6 +16,8 @@ context.createEffect(spatEffect,bus,BinauralSpatializationAspic);
 context.connect(hello, bus);
 context.connect(bus,asioOut);
 
+context.setParameter("application/buffer_size",512U);
+
 context.play();
 
 float sourcePos[]   =   {0.0, 0.0, -1.0};

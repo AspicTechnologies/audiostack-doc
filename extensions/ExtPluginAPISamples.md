@@ -1,10 +1,13 @@
 ---
 title: Plugin API (custom algorithms)
-permalink: /audiostack/extensions/PluginAPISamples/
+permalink: /audiostack/extensions/ExtPluginAPISamples/
 ---
 
+Plugin API extension allows you to implement your own algorithms in Audiostack. Whether you want to use your own binaural decoder, or add new effects that are not available in Audiostack, this extension is what you need.
 
+If you are looking for plugin API extension doc, go [here](../ExtPluginAPI).
 
+1. [Create your own HOA to Binaural plugin](#hoa-to-binaural)
 
 ## HOA to binaural
 
@@ -23,13 +26,13 @@ For clarity, the effect implementation will only be a blueprint. You have learne
 - create a plugin that contains your effect
 
 ```cpp
-{% include_relative PluginAPI_2_Hoa3Blueprint.cpp %}
+{% include_relative ExtPluginAPI_2_Hoa3Blueprint.cpp %}
 ```
 
 ### Create your Audiostack app
 
 ```cpp
-{% include_relative PluginAPI_2_Hoa3Main.cpp %}
+{% include_relative ExtPluginAPI_2_Hoa3Main.cpp %}
 ```
 
 ### Build

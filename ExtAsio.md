@@ -1,5 +1,5 @@
 ---
-title: Asio module
+title: ASIO (pro soundcard)
 permalink: /audiostack/Asio/
 ---
 
@@ -10,13 +10,14 @@ You can use ASIO extension to address many hardware IO (eg, outputing signal to 
 {% icon fa-exclamation-triangle  %} Like in other audio softwares, only one ASIO driver can be used at a time. You can create many AsioInput and AsioOutput, but they will all access the same driver. 
 
 1. Inputs
-	* [AsioInput](#asioinput)
+	* [AsioInput](#asio-input)
 2. Outputs
-	* [AsioOutput](#asiooutput)
+	* [AsioOutput](#asio-output)
 3. Helpers
-	* [AudioDriverList](#audiodriverlist)
-	* [AudioDriver](#audiodriver)
+	* [AudioDriverList](#audio-driver-list)
+	* [AudioDriver](#audio-driver)
 	* AudioSlot
+4. [Samples](#code-samples)
 
 	
 	
@@ -33,7 +34,7 @@ You can use ASIO extension to address many hardware IO (eg, outputing signal to 
 	
 ## Inputs
 
-### AsioInput
+### Asio Input
 
 Provides access to multiple inputs from a connected sound card with ASIO support.
 
@@ -46,7 +47,7 @@ Provides access to multiple inputs from a connected sound card with ASIO support
 
 #### Construction
 
-- **audioSlot (*const char* *)** : a string composed of the driver name and a list of input names. The input will have as many subchannels as input names in the list.
+- **audioSlot (*const char\**)** : a string composed of the driver name and a list of input names. The input will have as many subchannels as input names in the list.
 
 	Generic usage:
 	```cpp
@@ -59,26 +60,21 @@ context.createInput(ID,AsioInput,"Focusrite USB 2.0 Audio Driver:Input 3,Input 4
 	```
 
 - **audioSlot (*AudioSlot&*)** : an AudioSlot object representing the driver and the list of inputs (see [AudioSlot](#AudioSlot)).
+	
 	{% icon fa-exclamation-triangle  %} Requires revision
 	
 #### Parameters
 
-##### Instanciation
+ø
 
-- **buffer_size (*unsigned int*)** : the length of inputs audio buffers.
+> [Global parameters](../applicationparameters) used by this IO :
+> - application/buffer_size
 
-	This parameter is mapped by default to `application/buffer_size`.
 
-	Please note that this sets the length of audio buffer in application, not on the asio soundcard itself. For instance, your soundcard may use buffers of length 256 while your audiostack diagram processes buffer of size 512, or 256, or 4096, ...
-	
-	Usage : 
-	```cpp
-context.setParameter("application/buffer_size",256U);
-	```
+------
 
-	
-	
-	
+<br/>
+
 	
 	
 	
@@ -91,7 +87,7 @@ context.setParameter("application/buffer_size",256U);
 	
 ## Outputs
 
-### AsioOutput
+### Asio Output
 
 Provides access to multiple outputs from a connected sound card with ASIO support. 
 
@@ -105,7 +101,7 @@ It can be used to output multi-speaker output, or multiple headphones.
 
 #### Construction
 
-- **audioSlot (*const char* *)**: a string composed of the driver name and a list of output names. The output will have as many subchannels as output names in the list.
+- **audioSlot (*const char\**)**: a string composed of the driver name and a list of output names. The output will have as many subchannels as output names in the list.
 
 	Generic usage:
 	```cpp
@@ -118,25 +114,38 @@ context.createOutput(ID,AsioOutput,"Focusrite USB 2.0 Audio Driver:Output 1,Outp
 	```
 
 - **audioSlot (*AudioSlot&*)** : an AudioSlot object representing the driver and the list of outputs (see [AudioSlot](#AudioSlot)).
+	
 	{% icon fa-exclamation-triangle  %} Requires revision
 	
 	
 #### Parameters
 
-##### Instanciation
+##### Runtime
 
-- **buffer_size (*unsigned int*)** : the length of microphone audio buffers.
+- **master_gain (*float*)** : master gain of this output (amplitude).
 
-	This parameter is mapped by default to `application/buffer_size`.
+	This parameter is mapped by default to `listener/%list_id/master_gain`.
 
-	Please note that this sets the length of audio buffer in application, not on the asio soundcard itself. For instance, your soundcard may use buffers of length 256 while your audiostack diagram processes buffer of size 512, or 256, or 4096, ...
-	
 	Usage : 
-	```cpp
-context.setParameter("application/buffer_size",256U)
-	```
+```cpp
+context.setParameter("listener/2/master_gain",0.5f)
+```
 
-	
+> [Global parameters](../applicationparameters) used by this IO :
+> - application/buffer_size
+
+
+------
+
+<br/>
+
+
+
+
+
+
+
+
 	
 	
 	
@@ -146,7 +155,7 @@ context.setParameter("application/buffer_size",256U)
 ## Classes
 
 
-### AudioDriverList
+### Audio Driver List
 
 #### Construction
 
@@ -186,7 +195,7 @@ for(unsigned int i = 0; i < nbDrivers; ++i){
 ```	
 
 
-### AudioDriver
+### Audio Driver
 
 #### Construction
 
@@ -262,7 +271,7 @@ for(unsigned int inIdx = 0; inIdx < nbInputs; ++inIdx){
 
 ```	
 
-### AudioSlot
+### Audio Slot
 
 {% icon fa-exclamation-triangle  %} Requires revision
 
@@ -270,28 +279,22 @@ for(unsigned int inIdx = 0; inIdx < nbInputs; ++inIdx){
 
 ------
 
+<br/>
+<br/>
 
 ## Code samples
 
-
-### C++ API Samples
+For more code samples, see [ASIO samples](../extensions/ExtAsioSamples)
 
 > **Note:** Our Asio Inspector program, provided with Aspic Audiostack, enables you to get info about available asio drivers on your computer.
 
-#### ASIO Basics
+### ASIO Basics
 
 This sample spatialize hello input for one listener with 2 speakers on an asio device.
 
 ```cpp
-{% include_relative samples/Asio_1_Basics.cpp %}
+{% include_relative extensions/ExtAsio_1_Basics.cpp %}
 ```
 
-#### Multilistener using ASIO
-
-This sample spatialize hello input for two listeners on the same host. Each listener gets individualized spatialization.
-
-```cpp
-{% include_relative samples/Asio_2_Multilistener.cpp %}
-```
-
+For more code samples, see [ASIO samples](../extensions/ExtAsioSamples)
 

@@ -1,11 +1,12 @@
 [...]
 
+// Please launch your jack daemon before running audiostack.
+
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE.aslc");
 
 context.createInput(0,JackInput, 1U);
 context.createOutput(1,JackOutput,1U);
-// Please launch your jack daemon before running audiostack.
 
 context.connect(0,1);
 

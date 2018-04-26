@@ -7,30 +7,39 @@
   docs:
   - AudiostackAPI
   - Samples
+  - applicationparameters
 - title: SDK - Extensions
   docs:
   - ExtensionsPage
   - Core
   - AudioFile
   - Binaural
-  - Ambisonics
+  - extensions/Ambisonics
   - OSC
   - VBAP
   - Asio
-  - Memory
-  - extensions/RTP
-  - Jack
-  - extensions/PluginAPI
+#  - Memory
+  - extensions/ExtRTP
+  - extensions/jack
+  - extensions/ExtPluginAPI
   - Nahimic
-  - Sphere
+#  - Sphere 
 - title: SDK - Samples
   docs:
-  - extensions/PluginAPISamples
+  - ExtBinauralSamples
+  - extensions/ExtRTPSamples
+  - extensions/ExtAsioSamples
+  - extensions/ambisonics-samples
+  - extensions/ExtPluginAPISamples
+  - extensions/vbap-samples
+  - extensions/ExtNahimicSamples
+  - extensions/jack-samples
 - title: Unity3D - Basics
   docs:
   - Unity
 - title: Unity3D - Samples
   docs:
+  - unity3d/samples-list
   - unity3d/samples/AsioToUnity
   - unity3d/samples/MultiListenerUnityAsio
 

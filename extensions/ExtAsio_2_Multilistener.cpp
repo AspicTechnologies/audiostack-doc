@@ -22,6 +22,8 @@ context.connect(bus,"out_0",asioOut1,"in");
 context.connect(bus,"out_1",asioOut2,"in");
 // Since our bus holds 2 outputs and inputs, connection may use explicit naming
 
+context.setParameter("application/buffer_size",512U);
+
 context.play();
 
 // Audio source starts between the two listeners. They are both looking toward the source.

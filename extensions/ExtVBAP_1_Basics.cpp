@@ -1,15 +1,15 @@
 [...]
 
-int helloIn=0,jackOut=1,bus=2,vbap=3;
+enum:int{helloIn=0,jackOut=1,bus,vbap};
 
 AudiostackContext context;
 context.setLicenseKeyFromFile("LICENSE.aslc");
 
 context.createInput(helloIn,HelloInput);
-context.createOutput(jackOut,JackOutput,(unsigned int)4);
+context.createOutput(jackOut,JackOutput,4U);	// 4 outputs
 
 context.createBus(bus);
-context.createEffect(vbap,bus,MultiChannelSpatialization,(unsigned int)4);
+context.createEffect(vbap,bus,MultiChannelSpatialization,4U);
 
 float pos1[] = {-1,0,1};
 float pos2[] = {-1,0,-1};
@@ -37,16 +37,16 @@ char c;
 do{
 	std::cout<<"Feel free to connect jack ports (with program such as 'qjackctl').\n\tPress r or l to rotate the listener, press q to exit"<<std::endl;
 	std::cin>>c;
-switch(c){
+	switch(c){
 	case 'l':
 		listRot[1]-=10;
 		context.setParameter("listener/1/rotation",listRot);
-	break;
+		break;
 
 	case 'r':
-	listRot[1]+=10;
-	context.setParameter("listener/1/rotation",listRot);
-	break;
+		listRot[1]+=10;
+		context.setParameter("listener/1/rotation",listRot);
+		break;
 
 	}
 }while(c!='q');

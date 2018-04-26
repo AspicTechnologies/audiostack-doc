@@ -8,8 +8,10 @@ Aspic Audiostack Core module offers basic features. Here is a list:
 1. Inputs
 	* [HelloInput](#helloinput): basic synthetized input
 	* [OpenALInput](#openalinput): standard cross-OS microphone
+	* [Windows Core Audio Input](#windows-core-audio-input): low-latency, windows-only microphone capture
 2. Outputs
 	* [OpenALOutput](#openaloutput): standard cross-OS mono/stereo output
+	* [Windows Core Audio Output](#windows-core-audio-output): low-latency, windows-only mono/stereo output
 3. Effects
 	* [SimpleGain (will be renamed 'Gain')](#simplegain)
 	* [MultiChannelSimpleGain (will be renamed 'Splitter')](#multichannelsimplegain)
@@ -120,6 +122,51 @@ context.setParameter("application/buffer_size",4096U)
 
 
 
+### Windows Core Audio Input
+
+This input uses Windows APIs to access computer microphones. If you have multiple input devices, this wrapper will choose the default one.
+
+On windows, you can change default microphone in the control panel, section Sound, tab recording.
+
+| I/O		| Channel count 		| Sub channel count	|
+-|:-:|-:
+|`out`		|1						|1 (MONO)			|
+
+#### Construction
+
+- **hardware_id (*const char\**)** : the material identifier of the microphone you want to capture
+	
+	This parameter is optional. If left empty, Audiostack will chose default microphone.
+
+Usage : 
+```cpp
+context.createInput(ID,WindowsCoreAudioInput);
+// or 
+context.createInput(ID,WindowsCoreAudioInput,"4d36e96c-e325-11ce-bfc1-08002be10318");
+```
+
+#### Parameters
+
+##### Runtime
+
+ø
+
+##### Instanciation
+
+- **buffer_size (*unsigned int*)** : the length of microphone audio buffers. 
+
+	This parameter is mapped by default to `application/buffer_size`.
+
+	Usage : 
+```cpp
+context.setParameter("application/buffer_size",512U)
+```
+
+	We strongly advise to set this parameter once before Audiostak play(). 
+
+------
+
+
 
 
 
@@ -150,13 +197,127 @@ context.createOutput(ID,OpenALOutput,true);		// creates a stereo output
 context.createOutput(ID,OpenALOutput,false);	// creates a mono output
 ```
 
+
+
 #### Parameters
 
-No runtime or instanciation parameters.
+##### Runtime
+
+- **master_gain (*float*)** : master gain of this output (amplitude).
+
+	This parameter is mapped by default to `listener/%list_id/master_gain`.
+
+	Usage : 
+```cpp
+context.setParameter("listener/2/master_gain",0.5f)
+```
+
+##### Instanciation 
+
+- **buffer_size (*unsigned int*)** : the length of audio buffers. 
+
+	This parameter is mapped by default to `application/buffer_size`.
+
+	Usage : 
+```cpp
+context.setParameter("application/buffer_size",512U)
+```
+
+	We strongly advise to set this parameter once before Audiostak play(). 
+
+- **buffer_count (*unsigned int*)** : the number of audio buffers in queue. Default value is 2, it means that audio is double-buffered.
+
+	This parameter is mapped by default to `application/buffer_count`.
+
+	Usage : 
+```cpp
+context.setParameter("application/buffer_count",3U)
+```
+
+#### Callbacks
+
+- **triggered** : to be documented 
+
+#### Android behavior
+
+To be documented
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Windows Core Audio Output
+
+Uses Windows APIs to output audio on speakers/headphone. Will use the default device if your computer have multiple outputs.
+
+| I/O		| Channel count 		| Sub channel count	| |
+:-|:-:|:-:|-
+|`in`		|N						|1 or 2 (see construction)| |
+
+#### Construction
+
+- **stereo (*bool*)** : output will be stereo if value is set to TRUE or to mono if value is set to FALSE. When building a diagram, please ensure effects and outputs have compatible channel count : stereo effects may be plugged into stereo outputs.
+
+- **hardware_id (*const char\**)** : the material identifier of the microphone you want to capture
+	
+	This parameter is optional. If left empty, Audiostack will chose default microphone.
+
+Usage : 
+```cpp
+context.createOutput(ID,WindowsCoreAudioOutput,false);		// creates a mono output
+context.createOutput(ID,WindowsCoreAudioOutput,true);		// creates a stereo output 
+context.createOutput(ID,WindowsCoreAudioOutput,true,"4d36e96c-e325-11ce-bfc1-08002be10318");
+```
+
+
+#### Parameters
+
+##### Runtime
+
+- **master_gain (*float*)** : master gain of this output (amplitude).
+
+	This parameter is mapped by default to `listener/%list_id/master_gain`.
+
+	Usage : 
+```cpp
+context.setParameter("listener/2/master_gain",0.5f)
+```
+
+##### Instanciation 
+
+- **buffer_size (*unsigned int*)** : the length of audio buffers. 
+
+	This parameter is mapped by default to `application/buffer_size`.
+
+	Usage : 
+```cpp
+context.setParameter("application/buffer_size",512U)
+```
+
+	We strongly advise to set this parameter once before Audiostak play(). 
 
 
 ------
-		
 		
 
 

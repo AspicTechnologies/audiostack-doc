@@ -5,9 +5,20 @@ permalink: /audiostack/Nahimic/
 
 Audiostack Nahimic&trade; Binaural module provides binaural spatialization algorithms developed by A-Volute&trade;.
 
+1. Effects
+	* [Nahimic Binaural Spatialization](#nahimic-binaural-spatialization)
+
+
+
+
+
+
+
+
+
 ## Effects
 
-### NahimicBinauralSpatialization
+### Nahimic Binaural Spatialization
 
 Provides Nahimic&trade; binaural spatialization. 
 
@@ -16,7 +27,7 @@ Due to optimized signal processing, spatializated audio is mixed in one output c
 | I/O		| Channel count 		| Sub channel count	|
 -|:-:|-:
 |`in`		|N						|1 (MONO)			|
-|`out`		|1						|2 (STEREO)			|
+|`out`		|1						|2 (BINAURAL)			|
 
 #### Construction
 
@@ -29,25 +40,11 @@ context.createEffect(EFFECT_ID, BUS_ID, NahimicBinauralSpatialization);
 
 #### Parameters
 
-##### Instanciation
+ø
 
-- **sample_rate (*unsigned int*)** : sample rate of processed audio buffers.
-
-	This parameter is mapped by default to `application/sample_rate`.
-
-	Usage : 
-```cpp
-context.setParameter("application/sample_rate",48000);
-```
-
-- **buffer_size (*unsigned int*)** : the length of processed audio buffers.
-
-	This parameter is mapped by default to `application/buffer_size`.
-
-	Usage : 
-```cpp
-context.setParameter("application/buffer_size",1024U);
-```
+> [Global parameters](../applicationparameters) used by this IO :
+> - application/buffer_size
+> - application/sample_rate
 
 ##### Runtime
 
@@ -94,17 +91,18 @@ context.setParameter("listener/1/rotation", playerRot);
 
 ------
 
+<br/>
+
 
 ## Code samples
 
+For more code samples, see [Nahimic samples](../extensions/ExtNahimicSamples)
 
-### C++ API Samples
-
-#### Nahimic spatialization sample
+### Nahimic spatialization sample
 
 This sample spatialize audio for one listener.
 
-For multilistener samples, please see Asio Extension samples.
+For multilistener samples, please see [Asio Extension samples](../extensions/ExtAsioSamples).
 
 ```cpp
 {% include_relative samples/Nahimic_1_Basics.cpp%}

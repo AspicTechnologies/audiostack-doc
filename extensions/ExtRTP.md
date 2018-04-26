@@ -1,9 +1,9 @@
 ---
 title: RTP (audio streaming)
-permalink: /audiostack/extensions/RTP/
+permalink: /audiostack/extensions/ExtRTP/
 ---
 
-This extension uses RTP (Real-time Transport Protocol) to transfer audio streams oevr IP networks. It allows you to create applications with voice chat, or to compute audio server-side and stream it to clients.
+This extension uses RTP (Real-time Transport Protocol) to transfer audio streams over IP networks. It allows you to create applications with voice chat, or to compute audio server-side and stream it to clients.
 
 It is possible to create P2P or client/server architectures. The extension also embeds compression alghorithms such as OPUS but may also transfer PCM audio if need be.
 
@@ -15,10 +15,178 @@ It is possible to create P2P or client/server architectures. The extension also 
 	* [L16Codec](#l16-codec)
 	* [OpusCodec](#opus-codec)
 4. [Helper](#helpers)
+5. [Samples](#code-samples)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Inputs
 
+### RTP Input
+
+This input listens one incoming audio stream. It also provides decoding before sending audio in Audiostack diagram.
+
+| I/O		| Channel count 		| Sub channel count	|
+-|:-:|-:
+|`out`		|1						|1 (MONO)			|
+
+#### Construction
+
+- **codec (*const char\**)** : codec setup stored as string. Codecs provided in this API extension are able to automatically provide this parameter.
+
+	Usage : 
+	
+```cpp
+[...]	// instanciate a codec named myCodec
+context.createInput(ID,RTPInput,myCodec.serialize());
+```
+
+#### Parameters
+
+##### Instanciation
+
+- **port (*unsigned int*) :** listening port on local machine.
+
+	This parameter is mapped by default to `source/%src_id/port`.
+
+	Usage : 
+	
+```cpp
+context.setParameter("source/13/port",10400U);	// binds rtp input 13 to local port 10400
+```
+	
+- **bufferization (*unsigned int*) :** stores *bufferization* samples before sending them to the rest of the application. Default value is 8192. Reducing this will reduce latency but could create small glitches if network lags. 
+
+	This parameter is mapped by default to `source/%src_id/bufferization`.
+
+	Usage : 
+	
+```cpp
+context.setParameter("source/13/bufferization",8192U);
+```
+
+##### Runtime
+
+ø
+
+#### Callbacks
+	
+- **on_network_error:** this callback is called when network stacks encounters an error. For instance, if requested port is already occupied.
+
+	This parameter is mapped by default to `source/%src_id/on_network_error`.
+
+	Usage : 
+```cpp
+context.setCallback("source/ID/on_network_error",&onError); // onError is an argument-less function returning void.
+``` 
+
+See [samples](#code-samples) below for basic usage.
+
+------
+
+<br/>
+
+
+
+
+
+
+
+
+
+
+
 ## Outputs
+
+### RTP Output
+
+This output sends one audio channel to the network. It encodes packets before sending them.
+
+| I/O		| Channel count 		| Sub channel count	|
+-|:-:|-:
+|`in`		|1						|1 (MONO)			|
+
+#### Construction
+
+- **codec (*const char\**)** : codec setup stored as string. Codecs provided in this API extension are able to automatically provide this parameter.
+
+	Usage : 
+	
+```cpp
+[...]	// instanciate a codec named myCodec
+context.createOutput(ID,RTPOutput,myCodec.serialize());
+```
+
+#### Parameters
+
+##### Instanciation
+
+- **port (*unsigned int*) :** destination port on remote machine.
+
+	This parameter is mapped by default to `listener/%list_id/port`.
+
+	Usage : 
+	
+```cpp
+context.setParameter("listener/15/port",10500U);	// sends audio packets of output 15 to remote port 10500
+```
+	
+- **ip_address (*cosnt char\**) :** destination IP address.
+
+	This parameter is mapped by default to `listener/%list_id/ip_address`.
+
+	Usage : 
+	
+```cpp
+context.setParameter("listener/15/ip_address","127.0.0.1");
+```
+
+##### Runtime
+
+ø
+
+#### Callbacks
+	
+- **on_network_error:** this callback is called when network stacks encounters an error. For instance, if requested port is already occupied.
+
+	This parameter is mapped by default to `listener/%list_id/on_network_error`.
+
+	Usage : 
+```cpp
+context.setCallback("listener/ID/on_network_error",&onError); // onError is an argument-less function returning void.
+``` 
+
+
+See [samples](#code-samples) below for basic usage.
+
+------
+
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Classes
 
@@ -163,7 +331,7 @@ int main(){
 }
 ```
 
-
+------
 
 <br/>
 
@@ -174,24 +342,26 @@ int main(){
 
 
 
-------
 
 ## Code samples
 
-For more code samples, see [RTP samples](../ExtAudioFileSamples)
+For more code samples, see [RTP samples](../ExtRTPSamples)
 
 
 ### C++ API Samples
 
-#### TODO 1
+#### Microphone stream/listen
 
-Sample desc
+The following code captures the microphone, sends it to localhost, reads it back and outputs final audio on the soundcard. With little modifications, it is possible to create collaborative audio application.
+
+Please note this sample doesn't handle errors for code clarity.	
 
 ```cpp
+{% include_relative ExtRTP_1_Basics.cpp %}
 ```
 
 <br/>
 
-For more code samples, see [RTP samples](../ExtAudioFileSamples)
+For more code samples, see [RTP samples](../ExtRTPSamples)
 
 

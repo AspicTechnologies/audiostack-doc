@@ -17,7 +17,7 @@ Each API Extension section contains samples, however, you can also use this list
 - [Audio file samples](../ExtAudioFileSamples)
 - [Binaural samples](../ExtBinauralSamples)
 - [Nahimic samples](../ExtNahimicSamples)
-- [ASIO samples](../ExtAsioSamples)
+- [ASIO samples](../extensions/ExtAsioSamples)
 - [VBAP samples](../ExtVBAPSamples)
 - *[OSC samples](../ExtOSCSamples)*
 

@@ -83,6 +83,15 @@ int main(){
 }
 ```
 
+<br/>
+<br/>
+<br/>
+
+Before you read what's below
+-----
+
+The next chapter is a full API doc of Audiostack main class: *Context*. If you are new to Audiostack, it should maybe be a better idea to first discover samples. They will help you understand Audiostack architecture.
+
 AudiostackContext
 -----
 
